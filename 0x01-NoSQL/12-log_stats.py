@@ -5,7 +5,7 @@ from pymongo import MongoClient
 if __name__ == '__main__':
     collection = MongoClient('mongodb://127.0.0.1:27017').logs.nginx
 
-    print(collection.count_documents({}), 'logs')
+    print(collection.estimated_document_count(), 'logs')
 
     print('Methods:')
     print('\tmethod GET: ', collection.count_documents({"method": "GET"}))
