@@ -28,6 +28,6 @@ if __name__ == '__main__':
             ]
 
     agg = collection.aggregate(pipeline)
-    print('IPs')
+    print('IPs:')
     for ip in agg:
         print(f'\t{ip.get("_id")}: {ip.get("count")}')
