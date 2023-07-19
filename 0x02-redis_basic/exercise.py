@@ -6,10 +6,22 @@ from typing import Any, Callable, Union
 from uuid import uuid4
 
 
+def call_history(method: Callable) -> Callable:
+    """This function keeps track of inputs and outputs of methods"""
+    @wraps(method)
+    def tracker(self, data: Union[str, bytes, int, float]) -> str:
+        """This function updates the outputs and inputs lists"""
+        output: str = method(self, data)
+        self._redis.rpush(f'{method.__qualname__}:inputs', str(data))
+        self._redis.rpush(f'{method.__qualname__}:outputs', output)
+        return output
+    return tracker
+
+
 def count_calls(method: Callable) -> Callable:
     """This function keeps track of how many times a method is called"""
     @wraps(method)
-    def counter(self, data: Union[str, bytes, int, float]) -> None:
+    def counter(self, data: Union[str, bytes, int, float]) -> str:
         """This function handles the incrementation"""
         self._redis.incr(method.__qualname__)
         return method(self, data)
@@ -25,6 +37,7 @@ class Cache:
         self._redis = Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """This method sets a key-value pair in the database"""
