@@ -7,6 +7,7 @@ from uuid import uuid4
 
 class Cache:
     """Cache class definition"""
+    _redis: Redis
 
     def __init__(self) -> None:
         """Cache class object instantiation"""
@@ -15,6 +16,6 @@ class Cache:
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """This method sets a key-value pair in the database"""
-        key: str = str(uuid4())
+        key = str(uuid4())
         self._redis.set(key, data)
         return key
