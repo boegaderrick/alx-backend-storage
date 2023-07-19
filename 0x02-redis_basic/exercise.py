@@ -9,7 +9,7 @@ class Cache:
     """Cache class definition"""
     _redis: Redis
 
-    def __init__(self) -> None:
+    def __init__(self):
         """Cache class object instantiation"""
         self._redis = Redis()
         self._redis.flushdb()
