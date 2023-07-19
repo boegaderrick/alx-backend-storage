@@ -10,6 +10,7 @@ def count_calls(method: Callable) -> Callable:
     """This function keeps track of how many times a method is called"""
     @wraps(method)
     def counter(self, data: Union[str, bytes, int, float]) -> None:
+        """This function handles the incrementation"""
         self._redis.incr(method.__qualname__)
         return method(self, data)
     return counter
