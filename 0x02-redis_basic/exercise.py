@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 """This module contains Cache class"""
+from functools import wraps
 from redis import Redis
 from typing import Any, Callable, Union
 from uuid import uuid4
+
+
+def count_calls(method: Callable) -> Callable:
+    """This function keeps track of how many times a method is called"""
+    @wraps(method)
+    def counter(self, data: Union[str, bytes, int, float]) -> None:
+        self._redis.incr(method.__qualname__)
+    return counter
 
 
 class Cache:
@@ -14,6 +23,7 @@ class Cache:
         self._redis = Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """This method sets a key-value pair in the database"""
         key: str = str(uuid4())
