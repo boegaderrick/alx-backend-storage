@@ -7,15 +7,15 @@ from uuid import uuid4
 
 class Cache:
     """Cache class definition"""
-    __redis: Redis
+    _redis: Redis
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Cache class object instantiation"""
-        self.__redis = Redis()
-        self.__redis.flushdb()
+        self._redis = Redis()
+        self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """This method sets a value to a key in the database"""
+        """This method sets a key-value pair in the database"""
         key: str = str(uuid4())
-        self.__redis.set(key, data)
+        self._redis.set(key, data)
         return key
