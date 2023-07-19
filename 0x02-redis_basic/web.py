@@ -8,26 +8,24 @@
 from functools import wraps
 from redis import Redis
 from requests import get
-from typing import Any, Callable
 
-redis: Redis = Redis()
+redis = Redis()
 
 
-def counter(function: Callable) -> Callable:
+def counter(function):
     """
         This function keeps track of number of requests to a url
         Every time a get request is sent the results are also cached
     """
     @wraps(function)
-    def inner(url: str) -> str:
+    def inner(url):
         """This function handles the counting in the database"""
-        cacheName: str = 'cache:' + url
-        page: Any
+        cacheName = 'cache:' + url
         if redis.ttl(cacheName) < 1:
             page = function(url)
             redis.setex(cacheName, 10, page)
 
-            urlCount: str = 'count:' + url
+            urlCount = 'count:' + url
             redis.incr(urlCount)
             redis.setex(cacheName, 10, page)
         else:
@@ -39,7 +37,7 @@ def counter(function: Callable) -> Callable:
 
 
 @counter
-def get_page(url: str) -> str:
+def get_page(url):
     """This function sends a get request to a url"""
     page = get(url)
     return page.text
