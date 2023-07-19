@@ -2,8 +2,24 @@
 """This module contains Cache class"""
 from functools import wraps
 from redis import Redis
-from typing import Any, Callable, Union
+from typing import Any, Callable, List, Union
 from uuid import uuid4
+
+
+def replay(method: Callable) -> None:
+    """This function prints the history of method calls"""
+    qName = method.__qualname__
+    redis: Redis = Redis()
+    count: Any = redis.get(qName)
+    inputs: List[bytes] = redis.lrange(f'{qName}:inputs', 0, -1)
+    outputs: List[bytes] = redis.lrange(f'{qName}:outputs', 0, -1)
+
+    print(f'{qName} was called {int(count)} times:')
+    for inp, outp in zip(inputs, outputs):
+        try:
+            print(f"{qName}(*({int(inp)},)) -> {outp.decode()}")
+        except Exception:
+            print(f"{qName}(*('{inp.decode()}',)) -> {outp.decode()}")
 
 
 def call_history(method: Callable) -> Callable:
