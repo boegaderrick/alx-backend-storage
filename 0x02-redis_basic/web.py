@@ -43,3 +43,6 @@ def get_page(url: str) -> str:
     """This function sends a get request to a url"""
     page = get(url)
     return page.text
+
+if __name__ == '__main__':
+    get_page("http://slowwly.robertomurray.co.uk")
