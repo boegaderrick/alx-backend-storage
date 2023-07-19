@@ -11,6 +11,7 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def counter(self, data: Union[str, bytes, int, float]) -> None:
         self._redis.incr(method.__qualname__)
+        return method(self, data)
     return counter
 
 
