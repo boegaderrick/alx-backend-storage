@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """This module contains Cache class"""
 from redis import Redis
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Union
 from uuid import uuid4
 
 
@@ -20,7 +20,7 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable]) -> Any:
+    def get(self, key: str, fn: Union[Callable, None] = None) -> Any:
         """Retrieves data and converts it to desired format using 'fn'"""
         value: Union[bytes, None] = self._redis.get(key)
         if value and fn:
