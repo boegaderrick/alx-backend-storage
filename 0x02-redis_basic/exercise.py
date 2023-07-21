@@ -10,10 +10,10 @@ import redis
 def replay(method: Callable) -> None:
     """This function prints the history of method calls"""
     qName = method.__qualname__
-    redis: Redis = Redis()
-    count: Any = redis.get(qName)
-    inputs: List[bytes] = redis.lrange(f'{qName}:inputs', 0, -1)
-    outputs: List[bytes] = redis.lrange(f'{qName}:outputs', 0, -1)
+    red: redis.Redis = redis.Redis()
+    count: Any = red.get(qName)
+    inputs: List[bytes] = red.lrange(f'{qName}:inputs', 0, -1)
+    outputs: List[bytes] = red.lrange(f'{qName}:outputs', 0, -1)
 
     print(f'{qName} was called {int(count)} times:')
     for inp, outp in zip(inputs, outputs):
