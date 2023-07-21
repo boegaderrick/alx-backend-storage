@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """This module contains Cache class"""
 from functools import wraps
-from redis import Redis
 from typing import Any, Callable, List, Union
 from uuid import uuid4
 import redis
