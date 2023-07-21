@@ -11,7 +11,7 @@ from requests import get
 from typing import Any, Callable
 import redis
 
-redis: Redis = redis.Redis()
+red: redis.Redis = redis.Redis()
 
 
 def counter(function: Callable) -> Callable:
@@ -24,15 +24,15 @@ def counter(function: Callable) -> Callable:
         """This function handles counting and caching"""
         cacheName: str = 'cache:{}'.format(url)
         page: Any
-        if redis.ttl(cacheName) < 1:
+        if red.ttl(cacheName) < 1:
             page = function(url)
-            redis.setex(cacheName, 10, page)
+            red.setex(cacheName, 10, page)
         else:
-            page = redis.get(cacheName)
+            page = red.get(cacheName)
             page = page.decode()
 
         urlCount: str = 'count:{}'.format(url)
-        redis.incr(urlCount)
+        red.incr(urlCount)
 
         return page
     return inner
