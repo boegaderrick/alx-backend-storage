@@ -30,11 +30,8 @@ def counter(method: Callable) -> Callable:
             page = redis.get(cacheName)
             page = page.decode()
 
-        urlCount: str = 'count:{}'.format(url)
-        if redis.get(urlCount):
-            redis.incr(urlCount)
-        else:
-            redis.set(urlCount, 1)
+        # urlCount: str = 'count:{}'.format(url)
+        # redis.incr(urlCount)
 
         return page
     return inner
@@ -44,4 +41,7 @@ def counter(method: Callable) -> Callable:
 def get_page(url: str) -> str:
     """This function sends a get request to a url"""
     page = get(url)
+    urlCount: str = 'count:{}'.format(url)
+    redis.incr(urlCount)
+
     return page.text
