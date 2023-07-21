@@ -29,7 +29,7 @@ def call_history(method: Callable) -> Callable:
     def tracker(self, data: Union[str, bytes, int, float]) -> str:
         """This function updates the outputs and inputs lists"""
         output: str = method(self, data)
-        self._redis.rpush(f'{method.__qualname__}:inputs', str(data))
+        self._redis.rpush(f'{method.__qualname__}:inputs', str((data,)))
         self._redis.rpush(f'{method.__qualname__}:outputs', output)
         return output
     return tracker
