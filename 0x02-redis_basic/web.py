@@ -13,18 +13,18 @@ from typing import Any, Callable
 redis: Redis = Redis()
 
 
-def counter(method: Callable) -> Callable:
+def counter(function: Callable) -> Callable:
     """
         This function keeps track of number of requests to a url
         Every time a get request is sent the results are also cached
     """
-    @wraps(method)
+    @wraps(function)
     def inner(url: str) -> str:
-        """This function handles the counting in the database"""
+        """This function handles counting and caching"""
         cacheName: str = 'cache:{}'.format(url)
         page: Any
         if redis.ttl(cacheName) < 1:
-            page = method(url)
+            page = function(url)
             redis.setex(cacheName, 10, page)
         else:
             page = redis.get(cacheName)
@@ -42,3 +42,6 @@ def get_page(url: str) -> str:
     """This function sends a get request to a url"""
     page = get(url)
     return page.text
+
+if __name__ == '__main__':
+    get_page('http://slowwly.robertomurray.co.uk')
