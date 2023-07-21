@@ -46,7 +46,7 @@ def get_page(url: str) -> str:
     page: Any
     if redis.ttl(cacheName) < 1:
         page = get(url).text
-        redis.setex(cacheName, 10, page)
+        redis.set(name=cacheName, value=page, ex=10)
     else:
         page = redis.get(cacheName)
         page = page.decode()
