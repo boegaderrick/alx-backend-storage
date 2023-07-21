@@ -21,18 +21,17 @@ def counter(function: Callable) -> Callable:
     @wraps(function)
     def inner(url: str) -> str:
         """This function handles the counting in the database"""
-        cacheName: str = 'cache:' + url
+        cacheName: str = 'cache:{}'.format(url)
         page: Any
         if redis.ttl(cacheName) < 1:
             page = function(url)
             redis.setex(cacheName, 10, page)
-
-            urlCount: str = 'count:' + url
-            redis.incr(urlCount)
-            redis.setex(cacheName, 10, page)
         else:
             page = redis.get(cacheName)
             page = page.decode()
+
+        urlCount: str = 'count:{}'.format(url)
+        redis.incr(urlCount)
 
         return page
     return inner
