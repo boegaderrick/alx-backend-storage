@@ -13,7 +13,7 @@ import redis
 red: redis.Redis = redis.Redis()
 
 
-def counter(function: Callable[str, str]) -> Callable[..., str]:
+def counter(function: Callable[..., str]) -> Callable[..., str]:
     """
         This function keeps track of number of requests to a url
         Every time a get request is sent the results are also cached
