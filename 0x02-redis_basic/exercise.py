@@ -47,7 +47,7 @@ def count_calls(method: Callable) -> Callable:
 
 class Cache:
     """Cache class definition"""
-    _redis: Redis
+    _redis: redis.Redis
 
     def __init__(self) -> None:
         """Cache class object instantiation"""
