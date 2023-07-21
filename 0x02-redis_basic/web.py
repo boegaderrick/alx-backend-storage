@@ -25,7 +25,7 @@ def counter(method: Callable) -> Callable:
         page: Any
         if redis.ttl(cacheName) < 1:
             page = method(url)
-            redis.setex(cacheName, float(10), page)
+            redis.setex(cacheName, 10, page)
         else:
             page = redis.get(cacheName)
             page = page.decode()
