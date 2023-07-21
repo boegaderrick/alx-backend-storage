@@ -37,7 +37,7 @@ def call_history(method: Callable) -> Callable:
 
 def count_calls(method: Callable) -> Callable:
     """This function keeps track of how many times a method is called"""
-    name = method.__qualname__
+    name: str = method.__qualname__
     @wraps(method)
     def counter(self, data: Union[str, bytes, int, float]) -> str:
         """This function handles the incrementation"""
