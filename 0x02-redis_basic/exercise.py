@@ -18,9 +18,9 @@ def replay(method: Callable) -> None:
     print(f'{qName} was called {int(count)} times:')
     for inp, outp in zip(inputs, outputs):
         try:
-            print(f"{qName}(*({int(inp)},)) -> {outp.decode()}")
+            print(f"{qName}(*{int(inp)}) -> {outp.decode()}")
         except Exception:
-            print(f"{qName}(*('{inp.decode()}',)) -> {outp.decode()}")
+            print(f"{qName}(*{inp.decode()}) -> {outp.decode()}")
 
 
 def call_history(method: Callable) -> Callable:
