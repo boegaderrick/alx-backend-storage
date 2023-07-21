@@ -6,7 +6,6 @@
     and prioritized for return if the TTL has not run out.
 """
 from functools import wraps
-# from redis import Redis
 from requests import get
 from typing import Any, Callable
 import redis
@@ -42,4 +41,4 @@ def counter(function: Callable) -> Callable:
 def get_page(url: str) -> str:
     """This function sends a get request to a url"""
     page = get(url)
-    return page.text
+    return page
