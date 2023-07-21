@@ -4,6 +4,7 @@ from functools import wraps
 from redis import Redis
 from typing import Any, Callable, List, Union
 from uuid import uuid4
+import redis
 
 
 def replay(method: Callable) -> None:
@@ -50,7 +51,7 @@ class Cache:
 
     def __init__(self) -> None:
         """Cache class object instantiation"""
-        self._redis = Redis()
+        self._redis = redis.Redis()
         self._redis.flushdb()
 
     @call_history
