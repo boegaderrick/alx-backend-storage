@@ -25,7 +25,7 @@ def counter(method: Callable) -> Callable:
         page: Any
         if redis.ttl(cacheName) < 1:
             page = method(url)
-            redis.setex(cacheName, 10, page)
+            redis.setex(cacheName, float(10), page)
         else:
             page = redis.get(cacheName)
             page = page.decode()
@@ -37,22 +37,8 @@ def counter(method: Callable) -> Callable:
     return inner
 
 
-# @counter
+@counter
 def get_page(url: str) -> str:
     """This function sends a get request to a url"""
-    # page = get(url)
-
-    cacheName: str = 'cache:{}'.format(url)
-    page: Any
-    if redis.ttl(cacheName) < 1:
-        page = get(url).text
-        redis.set(name=cacheName, value=page, ex=10)
-        redis.expire(cacheName, 10)
-    else:
-        page = redis.get(cacheName)
-        page = page.decode()
-
-    urlCount: str = 'count:{}'.format(url)
-    redis.incr(urlCount)
-
+    page = get(url)
     return page.text
