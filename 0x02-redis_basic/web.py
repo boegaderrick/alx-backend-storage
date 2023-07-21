@@ -6,11 +6,12 @@
     and prioritized for return if the TTL has not run out.
 """
 from functools import wraps
-from redis import Redis
+# from redis import Redis
 from requests import get
 from typing import Any, Callable
+import redis
 
-redis: Redis = Redis()
+redis: Redis = redis.Redis()
 
 
 def counter(function: Callable) -> Callable:
